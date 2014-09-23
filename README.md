@@ -1,4 +1,14 @@
 madgwick.js
 ===========
 
-Sebastion Magwick's IMU and AHRS sensor fusion algorithm. 
+Sebastion Magwick's IMU and AHRS sensor fusion algorithms in JavaScript.
+
+
+This is MadgwickAHRS.c and MahonyAHRS.c taken from [url]http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/[url] and hand translated to JavaScript.
+
+Wrapped up in a THREE.js visualization of IMU motion.
+
+Can be viewed in a broser from index.html or installed as a Chrome App or Chrome browser extension.
+
+Real accelerometer, gyro and magnetometer data can be fed in via a serial link when used as a Chrome app or extention.
+
