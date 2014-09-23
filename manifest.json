@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+
+  "name": "Madgwick IMU",
+  "description": "This extension demonstrates Madgwick's IMU filter",
+  "version": "1.0",
+
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+
+  "icons": {
+    "32": "imu_32.png",
+    "128": "imu_128.png"
+  },
+
+  "permissions": [
+    "serial"
+  ]
+}
