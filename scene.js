@@ -114,15 +114,35 @@ var material = new THREE.MeshPhongMaterial({color: 0xffff00,
                                         vertexColors: THREE.FaceColors,
                                         shading: THREE.FlatShading
                                        });
-var geometry = new THREE.BoxGeometry(0.6, 2, 0.1);
-var cube = new THREE.Mesh(geometry, material);
+var materials = [
+    new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('Right.png')
+    }),
+    new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('Left.png')
+    }),
+    new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('Back.png')
+    }),
+    new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('Front.png')
+    }),
+    new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('Top.png')
+    }),
+    new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('Bottom.png')
+    }),
+];
+material = new THREE.MeshFaceMaterial(materials);
+var cube = new THREE.Mesh(new THREE.CubeGeometry(1.0, 0.6, 0.3), material);
 cube.position.x = 0.5;
 cube.position.y = 0.5;
 cube.position.z = 0.5;
 scene.add(cube);
 
 
-geometry = new THREE.TorusGeometry(1, 0.02, 16, 100);
+var geometry = new THREE.TorusGeometry(1, 0.02, 16, 100);
 var material = new THREE.MeshPhongMaterial({color: 0x0000ff,
                                         specular: 0xa0a0a0,
                                         shininess: 4,
@@ -229,7 +249,7 @@ var samplePeriodMillis = 1000 / sampleFreq;
 var step = 0;
 var frequencyRoll = 3;
 var frequencyPitch = 3;
-var frequencyYaw = 0.1;
+var frequencyYaw = 1;
 
 var doYaw   = true;
 var doRoll  = true;
@@ -237,7 +257,7 @@ var doPitch = true;
 
 var noiseLevel = 0.01;
 
-beta = 2;
+beta = 4;
 
 
 function doTest() {
@@ -289,7 +309,7 @@ function doTest() {
     mz += noise();
 
     madgwickAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
-
+//    mahonyAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
     // Note: Seems to me Madgwick has put the quaternian axis vector in q1, q2, q3 and the angle in q0
     //       
     cube.quaternion.set(q1, q2, q3, q0);

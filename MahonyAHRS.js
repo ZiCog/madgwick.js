@@ -17,8 +17,10 @@
 // Definitions
 
 var sampleFreq = 512.0;             // sample frequency in Hz
-var twoKpDef   = 2.0 * 0.5;         // 2 * proportional gain
-var twoKiDef   = 2.0 * 0.0;         // 2 * integral gain
+//var twoKpDef   = 2.0 * 0.5;         // 2 * proportional gain
+//var twoKiDef   = 2.0 * 0.0;         // 2 * integral gain
+var twoKpDef   = 30.0 * 0.5;         // 2 * proportional gain
+var twoKiDef   = 10.0 * 0.0;         // 2 * integral gain
 
 //---------------------------------------------------------------------------------------------------
 // Variable definitions
