@@ -116,22 +116,22 @@ var material = new THREE.MeshPhongMaterial({color: 0xffff00,
                                        });
 var materials = [
     new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('Right.png')
+        map: THREE.ImageUtils.loadTexture('textures/Right.png')
     }),
     new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('Left.png')
+        map: THREE.ImageUtils.loadTexture('textures/Left.png')
     }),
     new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('Back.png')
+        map: THREE.ImageUtils.loadTexture('textures/Back.png')
     }),
     new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('Front.png')
+        map: THREE.ImageUtils.loadTexture('textures/Front.png')
     }),
     new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('Top.png')
+        map: THREE.ImageUtils.loadTexture('textures/Top.png')
     }),
     new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('Bottom.png')
+        map: THREE.ImageUtils.loadTexture('textures/Bottom.png')
     }),
 ];
 material = new THREE.MeshFaceMaterial(materials);
@@ -278,7 +278,7 @@ function doTest() {
     } else {
         ay = 0.0;
     }
-    az = 1.0;                                    // Gravity constant
+    az = -1.0;                                    // Gravity constant
 
     if (doYaw) {
         // Magnetometer input
