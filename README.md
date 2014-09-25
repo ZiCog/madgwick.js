@@ -13,5 +13,6 @@ Can be viewed in a browser from index.html or installed as a Chrome App or Chrom
 Real accelerometer, gyro and magnetometer data can be fed in via a serial link when used as a Chrome app or extention.
 
 
+
 ![alt text](https://raw.githubusercontent.com/ZiCog/madgwick.js/master/madgwick.png "Madgwick.js screen shot.")
 
