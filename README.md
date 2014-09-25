@@ -10,7 +10,7 @@ Wrapped up in a THREE.js visualization of IMU motion.
 
 Can be viewed in a browser from index.html or installed as a Chrome App or Chrome browser extension.
 
-Real accelerometer, gyro and magnetometer data can be fed in via a serial link when used as a Chrome app or extention.
+Real accelerometer, gyro and magnetometer data can be fed in via a serial link when used as a Chrome app or extension.
 
 
 
