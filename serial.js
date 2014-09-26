@@ -128,6 +128,6 @@ var onConnect = function (connectionInfo) {
 };
 
 // Connect to the serial port 
-chrome.serial.connect("/dev/ttyACM1", {bitrate: 115200}, onConnect);
+chrome.serial.connect("/dev/ttyACM0", {bitrate: 115200}, onConnect);
 
 

@@ -251,7 +251,7 @@ var frequencyRoll = 3;
 var frequencyPitch = 3;
 var frequencyYaw = 0.1;
 
-var doYaw   = true;
+var doYaw   = false;
 var doRoll  = false;
 var doPitch = false;
 
