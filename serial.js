@@ -37,6 +37,10 @@ var onLineReceived = function (line) {
 
 var imuData;
 
+var sampleTimeLast;
+var sampleTimeNow;
+var samplePeriod;
+
 var onReceiveCallback = function (info) {
     var myString = "",
         i,
@@ -63,6 +67,9 @@ var onReceiveCallback = function (info) {
                 myString += String.fromCharCode(buffer[i]);
             }
         }
+        sampleTimeNow = performance.now();
+        samplePeriod = sampleTimeNow - sampleTimeLast;
+        sampleTimeLast = sampleTimeNow;
         imuData = JSON.parse(myString);
     }
 };
@@ -121,6 +128,6 @@ var onConnect = function (connectionInfo) {
 };
 
 // Connect to the serial port 
-chrome.serial.connect("/dev/ttyACM0", {bitrate: 115200}, onConnect);
+chrome.serial.connect("/dev/ttyACM1", {bitrate: 115200}, onConnect);
 
 

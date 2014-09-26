@@ -17,8 +17,8 @@
 //---------------------------------------------------------------------------------------------------
 // Definitions
 
-var sampleFreq = 50.0;  // sample frequency in Hz
-var betaDef    =  4;   // 2 * proportional gain
+var sampleFreq = 100.0;  // sample frequency in Hz
+var betaDef    =  1;   // 2 * proportional gain
 
 //---------------------------------------------------------------------------------------------------
 // Variable definitions

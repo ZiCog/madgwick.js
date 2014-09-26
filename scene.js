@@ -235,7 +235,7 @@ function random(low, high) {
 // Test
 console.log(q0, q1, q2, q3);
 
-var gx = 0.0;
+var gx = 0.5;
 var gy = 0.0;
 var gz = 0.0;
 var ax = 1.0;
@@ -249,15 +249,13 @@ var samplePeriodMillis = 1000 / sampleFreq;
 var step = 0;
 var frequencyRoll = 3;
 var frequencyPitch = 3;
-var frequencyYaw = 1;
+var frequencyYaw = 0.1;
 
-var doYaw   = false;
+var doYaw   = true;
 var doRoll  = false;
 var doPitch = false;
 
 var noiseLevel = 0.01;
-
-beta = 4;
 
 
 function doTest() {
@@ -313,8 +311,8 @@ function doTest() {
     ay = imuData.a[1];
     az = imuData.a[2];
 
-//    madgwickAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
-    mahonyAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
+    madgwickAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
+//    mahonyAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
     // Note: Seems to me Madgwick has put the quaternian axis vector in q1, q2, q3 and the angle in q0
     //       
     cube.quaternion.set(q1, q2, q3, q0);
