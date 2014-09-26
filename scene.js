@@ -251,9 +251,9 @@ var frequencyRoll = 3;
 var frequencyPitch = 3;
 var frequencyYaw = 1;
 
-var doYaw   = true;
-var doRoll  = true;
-var doPitch = true;
+var doYaw   = false;
+var doRoll  = false;
+var doPitch = false;
 
 var noiseLevel = 0.01;
 
@@ -295,7 +295,7 @@ function doTest() {
     dirLight.position.set(Math.sin(frequencyYaw * (2 * Math.PI) * step / sampleFreq),
                           Math.cos(frequencyYaw * (2 * Math.PI) * step / sampleFreq),
                           0.5);
-
+/*
     // Put some noise on the gyro
     var noise = function () { return random(-noiseLevel,  +noiseLevel); };
     gx += noise();
@@ -307,9 +307,14 @@ function doTest() {
     mx += noise();
     my += noise();
     mz += noise();
+*/
 
-    madgwickAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
-//    mahonyAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
+    ax = imuData.a[0];
+    ay = imuData.a[1];
+    az = imuData.a[2];
+
+//    madgwickAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
+    mahonyAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
     // Note: Seems to me Madgwick has put the quaternian axis vector in q1, q2, q3 and the angle in q0
     //       
     cube.quaternion.set(q1, q2, q3, q0);

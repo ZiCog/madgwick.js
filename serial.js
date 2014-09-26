@@ -34,10 +34,17 @@ var onLineReceived = function (line) {
     console.log("Serial line:", line);
 };
 
+
+var imuData;
+
 var onReceiveCallback = function (info) {
-    var str;
+    var myString = "",
+        i,
+        buffer,
+        byte;
 
     if (info.connectionId === connectionId && info.data) {
+/*
         str = convertArrayBufferToString(info.data);
         if (str.charAt(str.length - 1) === '\n') {
             stringReceived += str.substring(0, str.length - 1);
@@ -46,6 +53,17 @@ var onReceiveCallback = function (info) {
         } else {
             stringReceived += str;
         }
+*/
+        buffer = new Uint8Array(info.data);
+        //console.log(buffer);
+
+        for (i = 0; i < buffer.byteLength; i += 1) {
+            byte = buffer[i];
+            if ((byte !== 0x0d) && (byte !== 0x0a) && (byte !== 0x08) && (byte !== 62)) {
+                myString += String.fromCharCode(buffer[i]);
+            }
+        }
+        imuData = JSON.parse(myString);
     }
 };
 
@@ -98,11 +116,11 @@ var onConnect = function (connectionInfo) {
     connectionId = connectionInfo.connectionId;
     // Do whatever you need to do with the opened port.
 
-    writeSerial("Hello world!");
+    //writeSerial("Hello world!");
 
 };
 
 // Connect to the serial port 
-chrome.serial.connect("/dev/ttyUSB0", {bitrate: 115200}, onConnect);
+chrome.serial.connect("/dev/ttyACM0", {bitrate: 115200}, onConnect);
 
 
