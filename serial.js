@@ -28,7 +28,7 @@ var convertStringToArrayBuffer = function (str) {
 };
 
 
-var imuData;
+var imuData = {a: [0, 0, 0], g: [0, 0, 0], m: [0, 0, 0], b: 0};
 
 var myString = "";
 function ascii2strings(buffer) {
