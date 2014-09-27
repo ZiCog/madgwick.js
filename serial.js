@@ -7,7 +7,8 @@
          scene: true,
          chrome: true,
          ArrayBuffer: true,
-         Uint8Array: true
+         Uint8Array: true,
+         Int8Array: true
 */
 
 "use strict";
@@ -27,50 +28,47 @@ var convertStringToArrayBuffer = function (str) {
 };
 
 
-var stringReceived = '';
-
-
-var onLineReceived = function (line) {
-    console.log("Serial line:", line);
-};
-
-
 var imuData;
 
-var sampleTimeLast;
-var sampleTimeNow;
-var samplePeriod;
+var myString = "";
+function ascii2strings(buffer) {
+    var lineStart = 0,
+        lineEnd = 0,
+        i,
+        j,
+        inBytes = new Int8Array(buffer);
+
+    // Scan all input bytes looking for a line ending
+    for (i = 0; i < inBytes.length; i += 1) {
+        // Do we have a line ending here?
+        if ((inBytes[i] === 0x0d) || (inBytes[i] === 0x0a)) {
+            lineEnd = i;
+
+            // Convert bytes of the line to a string
+            for (j = lineStart; j < lineEnd; j += 1) {
+                myString += String.fromCharCode(inBytes[j]);
+            }
+            // Emit the line as a  string
+            try {
+                imuData = JSON.parse(myString);
+            } catch (ignore) {
+            }
+            myString = "";
+            lineStart = lineEnd + 1;
+        }
+    }
+    // Are there any trailing bytes?
+    if (lineStart !== inBytes.length) {
+        // Convert trailing bytes string, a part line ready for next call.
+        for (i = lineEnd + 1; i < inBytes.length; i += 1) {
+            myString += String.fromCharCode(inBytes[i]);
+        }
+    }
+}
 
 var onReceiveCallback = function (info) {
-    var myString = "",
-        i,
-        buffer,
-        byte;
-
     if (info.connectionId === connectionId && info.data) {
-/*
-        str = convertArrayBufferToString(info.data);
-        if (str.charAt(str.length - 1) === '\n') {
-            stringReceived += str.substring(0, str.length - 1);
-            onLineReceived(stringReceived);
-            stringReceived = '';
-        } else {
-            stringReceived += str;
-        }
-*/
-        buffer = new Uint8Array(info.data);
-        //console.log(buffer);
-
-        for (i = 0; i < buffer.byteLength; i += 1) {
-            byte = buffer[i];
-            if ((byte !== 0x0d) && (byte !== 0x0a) && (byte !== 0x08) && (byte !== 62)) {
-                myString += String.fromCharCode(buffer[i]);
-            }
-        }
-        sampleTimeNow = performance.now();
-        samplePeriod = sampleTimeNow - sampleTimeLast;
-        sampleTimeLast = sampleTimeNow;
-        imuData = JSON.parse(myString);
+        ascii2strings(info.data);
     }
 };
 
@@ -129,5 +127,3 @@ var onConnect = function (connectionInfo) {
 
 // Connect to the serial port 
 chrome.serial.connect("/dev/ttyACM0", {bitrate: 115200}, onConnect);
-
-
