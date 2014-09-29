@@ -2,20 +2,32 @@
     <head>
     <title>madgwick.js</title>
         <style>
-            * { width:        100%;
+            * {
+                width:        100%;
                 height:       100%;
                 border-width: 0px;
                 margin:       0px;
                 padding:      0px;
               }
+            #canvas {
+                background-color: red;
+                width:    100%;
+                height:   100%;
+                border:   0px;
+                margin:   0px;
+                padding:  0px;
+                position: fixed /* fixed or static see mouseDown function */
+            }
         </style>
         </head>
         <body>
+            <div id="canvas">
             <script src="three.min.js"></script>
             <script src="MadgwickAHRS.js"></script>
             <script src="MahonyAHRS.js"></script>
             <script src="serial.js"></script>
             <script src="scene.js"></script>
+
         </body>
 </html>
 

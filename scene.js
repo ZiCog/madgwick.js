@@ -20,6 +20,9 @@ var axisX = new THREE.Vector3(1, 0, 0);
 var axisY = new THREE.Vector3(0, 1, 0);
 var axisZ = new THREE.Vector3(0, 0, 1);
 
+var objects = [];
+
+
 // 
 function rotateOnAxis(object, axis, angle) {
     keyQ1.setFromAxisAngle(axis, angle);
@@ -41,15 +44,17 @@ function dumbbell(shereRadius, cylinderRadius, colour) {
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = 1.0;
     group.add(mesh);
+    objects.push(mesh);
 
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = -1.0;
     group.add(mesh);
+    objects.push(mesh);
 
     geometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, 2, 32);
     mesh = new THREE.Mesh(geometry, material);
     group.add(mesh);
-
+    objects.push(group);
     return group;
 }
 
@@ -140,6 +145,7 @@ cube.position.x = 0.5;
 cube.position.y = 0.5;
 cube.position.z = 0.5;
 scene.add(cube);
+objects.push(cube);
 
 
 var geometry = new THREE.TorusGeometry(1, 0.02, 16, 100);
@@ -178,10 +184,15 @@ scene.add(torus);
 
 
 
-// Create a renderer
+// Create a renderer (In an existing div)
+var container = document.getElementById('canvas');
 var renderer = new THREE.WebGLRenderer();
-renderer.setSize(width, height);
-document.body.appendChild(renderer.domElement);
+var CANVAS_WIDTH = container.scrollWidth;
+var CANVAS_HEIGHT = container.scrollHeight;
+console.log("WIDTH", CANVAS_WIDTH);
+console.log("HEIGHT", CANVAS_HEIGHT);
+renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+container.appendChild(renderer.domElement);
 
 // Render function.
 var render = function () {
@@ -222,6 +233,42 @@ function onKeyDown(event) {
         break;
     }
 }
+
+// Find intersections
+var projector = new THREE.Projector();
+var mouse = { x: 0, y: 0 };
+var count = 0;
+var positionProperty = window.getComputedStyle(container, null).getPropertyValue("position");
+
+// Mouse listener
+document.addEventListener('mousedown', function (event) {
+    var raycaster,
+        vector,
+        intersects;
+
+    if (positionProperty === "static") {
+        // For the following method to work correctly, set the canvas position *static*; margin > 0 and padding > 0 are OK
+        mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
+        mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
+    } else if (positionProperty === "fixed") {
+        // For this alternate method, set the canvas position *fixed*; set top > 0, set left > 0; padding must be 0; margin > 0 is OK
+        mouse.x = ((event.clientX - container.offsetLeft) / container.clientWidth) * 2 - 1;
+        mouse.y = -((event.clientY - container.offsetTop) / container.clientHeight) * 2 + 1;
+    } else {
+        console.log('Error: THRE.js element must have postion property "fixed" or "static"');
+    }
+    vector = new THREE.Vector3(mouse.x, mouse.y, 1);
+    projector.unprojectVector(vector, camera);
+
+    raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+
+    intersects = raycaster.intersectObjects(objects);
+
+    if (intersects.length > 0) {
+        //info.innerHTML = 'INTERSECT Count: ' + ++count;
+        console.log('INTERSECT Count: ' + count++);
+    }
+}, false);
 
 window.addEventListener('resize', onWindowResize, false);
 document.addEventListener('keydown', onKeyDown, false);
