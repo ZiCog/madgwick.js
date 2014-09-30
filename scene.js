@@ -80,16 +80,21 @@ function showAxes() {
     scene.add(zPointer);
 }
 
+// Create a renderer using an existing canvas
+var canvas = document.getElementById("canvas");
+var renderer = new THREE.WebGLRenderer({ canvas: canvas });
+var CANVAS_WIDTH = canvas.scrollWidth;
+var CANVAS_HEIGHT = canvas.scrollHeight;
+var CANVAS_ASPECT = CANVAS_WIDTH / CANVAS_HEIGHT;
+console.log("WIDTH", CANVAS_WIDTH);
+console.log("HEIGHT", CANVAS_HEIGHT);
+renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+
 // Create a scene.
 var scene = new THREE.Scene();
-var aspectRatio = window.innerWidth / window.innerHeight;
-var width = window.innerWidth;
-var height = window.innerHeight;
-var dirLight;
-var hemiLight;
 
 // Create a camera
-var camera = new THREE.PerspectiveCamera(30, aspectRatio, 0.1, 1000);
+var camera = new THREE.PerspectiveCamera(30, CANVAS_ASPECT, 0.1, 1000);
 camera.position.x = 2.5;
 camera.position.y = -2.5;
 camera.position.z = 2.5;
@@ -97,6 +102,9 @@ camera.up = new THREE.Vector3(0, 0, 1);
 camera.lookAt(new THREE.Vector3(0.2, 0.2, 0.2));
 
 // Create lights
+
+var dirLight;
+var hemiLight;
 
 hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
 hemiLight.color.setHSL(0.6, 1, 0.6);
@@ -184,15 +192,6 @@ scene.add(torus);
 
 
 
-// Create a renderer (In an existing div)
-var container = document.getElementById('canvas');
-var renderer = new THREE.WebGLRenderer();
-var CANVAS_WIDTH = container.scrollWidth;
-var CANVAS_HEIGHT = container.scrollHeight;
-console.log("WIDTH", CANVAS_WIDTH);
-console.log("HEIGHT", CANVAS_HEIGHT);
-renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-container.appendChild(renderer.domElement);
 
 // Render function.
 var render = function () {
@@ -207,9 +206,14 @@ var render = function () {
 render();
 
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    var layer1 = document.getElementById('layer1');
+    CANVAS_WIDTH = layer1.offsetWidth;
+    CANVAS_HEIGHT = layer1.offsetHeight;
+    console.log("WIDTH", CANVAS_WIDTH);
+    console.log("HEIGHT", CANVAS_HEIGHT);
+    camera.aspect = CANVAS_WIDTH / CANVAS_HEIGHT;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
 
@@ -234,41 +238,6 @@ function onKeyDown(event) {
     }
 }
 
-// Find intersections
-var projector = new THREE.Projector();
-var mouse = { x: 0, y: 0 };
-var count = 0;
-var positionProperty = window.getComputedStyle(container, null).getPropertyValue("position");
-
-// Mouse listener
-document.addEventListener('mousedown', function (event) {
-    var raycaster,
-        vector,
-        intersects;
-
-    if (positionProperty === "static") {
-        // For the following method to work correctly, set the canvas position *static*; margin > 0 and padding > 0 are OK
-        mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
-        mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
-    } else if (positionProperty === "fixed") {
-        // For this alternate method, set the canvas position *fixed*; set top > 0, set left > 0; padding must be 0; margin > 0 is OK
-        mouse.x = ((event.clientX - container.offsetLeft) / container.clientWidth) * 2 - 1;
-        mouse.y = -((event.clientY - container.offsetTop) / container.clientHeight) * 2 + 1;
-    } else {
-        console.log('Error: THRE.js element must have postion property "fixed" or "static"');
-    }
-    vector = new THREE.Vector3(mouse.x, mouse.y, 1);
-    projector.unprojectVector(vector, camera);
-
-    raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-
-    intersects = raycaster.intersectObjects(objects);
-
-    if (intersects.length > 0) {
-        //info.innerHTML = 'INTERSECT Count: ' + ++count;
-        console.log('INTERSECT Count: ' + count++);
-    }
-}, false);
 
 window.addEventListener('resize', onWindowResize, false);
 document.addEventListener('keydown', onKeyDown, false);
@@ -335,7 +304,7 @@ function doTest() {
         my = 0.0;
         mz = 0.0;
     }
-
+    
     // Move the light around with the magnetometer vector. 
     dirLight.position.set(Math.sin(frequencyYaw * (2 * Math.PI) * step / sampleFreq),
                           Math.cos(frequencyYaw * (2 * Math.PI) * step / sampleFreq),
@@ -360,10 +329,9 @@ function doTest() {
     gx = imuData.g[0];
     gy = imuData.g[1];
     gz = imuData.g[2];
-    mx = imuData.m[0];
-    my = imuData.m[1];
-    mz = imuData.m[2];
-
+//    mx = imuData.m[0];
+//    my = imuData.m[1];
+//    mz = imuData.m[2];
     madgwickAHRSupdate(gx, gy, gz, ax, ay, az, mx, my, mz);
 
 
@@ -378,6 +346,39 @@ function doTest() {
 
     step += 1;
 }
+
+// Find intersections
+var projector = new THREE.Projector();
+var mouse = { x: 0, y: 0 };
+var count = 0;
+
+// Mouse listener
+document.addEventListener('mousedown', function (event) {
+    var raycaster,
+        vector,
+        intersects;
+
+    var rectObject = renderer.domElement.getBoundingClientRect();
+
+    mouse.x = ((event.clientX - rectObject.left) / rectObject.width) * 2 - 1;
+    mouse.y = -((event.clientY - rectObject.top) / rectObject.height) * 2 + 1;
+
+    vector = new THREE.Vector3(mouse.x, mouse.y, 1);
+    projector.unprojectVector(vector, camera);
+
+    raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+
+    intersects = raycaster.intersectObjects(objects);
+
+    if (intersects.length > 0) {
+        //info.innerHTML = 'INTERSECT Count: ' + ++count;
+        console.log('INTERSECT Count: ' + count++);
+        doYaw = !doYaw;
+        console.log(doYaw);
+    }
+}, false);
+
+
 
 setInterval(function () {
     doTest();

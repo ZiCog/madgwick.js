@@ -3,31 +3,67 @@
     <title>madgwick.js</title>
         <style>
             * {
-                width:        100%;
-                height:       100%;
-                border-width: 0px;
-                margin:       0px;
-                padding:      0px;
-              }
+                width:              100%;
+                height:             100%;
+                border-width:        0px;
+                margin:              0px;
+                padding:             0px;
+            }
+            #header {
+                color:             white;
+                width:              100%;
+                height:              10%;
+                background-color: orange;
+            }
             #canvas {
-                background-color: red;
-                width:    100%;
-                height:   100%;
-                border:   0px;
-                margin:   0px;
-                padding:  0px;
-                position: fixed /* fixed or static see mouseDown function */
+                background-color:    red;
+            }
+            #divstack {
+                width:              100%;
+                height:              80%;
+                position:       relative;
+            }
+            #layer1 {
+                color:             white;
+                position:       absolute;
+                z-index:               1;
+            }
+            #layer2 {
+                color:             white;
+                position:       absolute;
+                z-index:               2;
+            }
+            #footer {
+                width:              100%;
+                height:              10%;
+                color:             white;
+                background-color: orange;
             }
         </style>
         </head>
         <body>
-            <div id="canvas">
+            <div id="header">
+                Madgwick AHRS.
+            </div>
+            <div id="divstack">
+
+                <div id="layer1">
+                    <canvas id="canvas">
+                    </canvas>
+                </div>
+
+                <div id="layer2">
+                   
+                </div>
+            </div>
+            <div id="footer">
+                Status.
+            </div>
             <script src="three.min.js"></script>
             <script src="MadgwickAHRS.js"></script>
             <script src="MahonyAHRS.js"></script>
             <script src="serial.js"></script>
             <script src="scene.js"></script>
-
         </body>
 </html>
 
