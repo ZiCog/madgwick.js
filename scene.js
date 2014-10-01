@@ -375,6 +375,12 @@ document.addEventListener('mousedown', function (event) {
         console.log('INTERSECT Count: ' + count++);
         doYaw = !doYaw;
         console.log(doYaw);
+
+        var el = document.getElementById('divstack');
+        el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        el.mozRequestFullScreen();
+        el.msRequestFullscreen();
+        el.requestFullscreen(); // standard
     }
 }, false);
 

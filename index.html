@@ -6,13 +6,15 @@
                 border-width:        0px;
                 margin:              0px;
                 padding:             0px;
+                font-size:          20px;
+                overflow:         hidden;
             }
             #header {
                 color:             white;
                 width:              100%;
                 height:              10%;
                 background-color: orange;
-            }
+                -webkit-app-region: drag;            }
             #canvas {
                 width:              100%;
                 height:             100%;
@@ -43,6 +45,7 @@
             }
             #hud {
                 color:             white;
+                opacity:             0.7;
                 position:         static;
             }
         </style>
@@ -60,10 +63,10 @@
 
                 <div id="layer2">
                     <div id="hud">
-Algortithm: Madgwick AHRS<p>
-Samplerate: 100Hz<p>
-Beta: 1.0<p>
-Serial port: /dev/ttyACM0<p>
+<pre>Algortithm:  Madgwick AHRS<p>
+Sample rate: 100Hz<p>
+Beta:        1.0<p>
+Serial port: /dev/ttyACM0</pre>
                     </div>
                 </div>
             </div>
