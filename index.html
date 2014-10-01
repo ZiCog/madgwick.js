@@ -3,8 +3,6 @@
     <title>madgwick.js</title>
         <style>
             * {
-                width:              100%;
-                height:             100%;
                 border-width:        0px;
                 margin:              0px;
                 padding:             0px;
@@ -16,6 +14,8 @@
                 background-color: orange;
             }
             #canvas {
+                width:              100%;
+                height:             100%;
                 background-color:    red;
             }
             #divstack {
@@ -24,12 +24,14 @@
                 position:       relative;
             }
             #layer1 {
-                color:             white;
+                width:              100%;
+                height:             100%;
                 position:       absolute;
                 z-index:               1;
             }
             #layer2 {
-                color:             white;
+                width:              100%;
+                height:             100%;
                 position:       absolute;
                 z-index:               2;
             }
@@ -38,6 +40,10 @@
                 height:              10%;
                 color:             white;
                 background-color: orange;
+            }
+            #hud {
+                color:             white;
+                position:         static;
             }
         </style>
         </head>
@@ -53,11 +59,17 @@
                 </div>
 
                 <div id="layer2">
-                   
+                    <div id="hud">
+Algortithm: Madgwick AHRS<p>
+Samplerate: 100Hz<p>
+Beta: 1.0<p>
+Serial port: /dev/ttyACM0<p>
+                    </div>
                 </div>
             </div>
             <div id="footer">
-                Status.
+                Status.<p>
+                OK
             </div>
             <script src="three.min.js"></script>
             <script src="MadgwickAHRS.js"></script>
